@@ -1,3 +1,9 @@
+> [!NOTE]
+> This is just my personal fork, with non essential deps and features removed, just a minimal easy to maintain repo that is easy to keep up to date. 
+> As I can't imagine playing the game without it, I wanted something that I can update myself on Linux in trivial amount of time in case of an game update.
+>
+> You should just go use and support the upstream mod, unless it is broken for you.
+
 # In-World Navigation
 
 [![](https://byob.yarr.is/jackhumbert/in_world_navigation/cp_version)](https://github.com/jackhumbert/in_world_navigation/actions/workflows/build.yaml)
@@ -8,13 +14,13 @@ This mod displays in-world holographic arrows for quest/point of interest naviga
 
 ## Installation
 
-[Get the latest release here](https://github.com/jackhumbert/in_world_navigation/releases), or [grab the latest CI build here (developers only)](https://github.com/jackhumbert/in_world_navigation/actions). If you're upgrading, you may want to delete the `r6/scripts/in_world_navigation` folder, since files may have been renamed/removed.
+[grab the latest CI build here (developers only)](https://github.com/PolyMeilex/in_world_navigation/actions).
 
 ## Requirements
 
 * [RED4ext](https://github.com/WopsS/RED4ext)
 * [Redscript](https://github.com/jac3km4/redscript)
-* [Mod Settings](https://github.com/jackhumbert/mod_settings)
+* (optional) [Mod Settings](https://github.com/jackhumbert/mod_settings)
 
 ## Bugs
 

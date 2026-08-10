@@ -46,13 +46,13 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.MOD_ZIP_FILENAME }}_${{ env.PRETTY_CONFIG }}_${{ env.SHORT_SHA }}
-        path: ${{ github.workspace }}/game_dir/**
+        path: ${{ github.workspace }}/build/mod_package/**
 
-    - name: Upload game_dir_debug with zip file name
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ env.MOD_ZIP_FILENAME }}_${{ env.PRETTY_CONFIG }}_${{ env.SHORT_SHA }}_pdb
-        path: ${{ github.workspace }}/game_dir_debug/**
+    # - name: Upload game_dir_debug with zip file name
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: ${{ env.MOD_ZIP_FILENAME }}_${{ env.PRETTY_CONFIG }}_${{ env.SHORT_SHA }}_pdb
+    #     path: ${{ github.workspace }}/game_dir_debug/**
 
     # - name: Upload game_dir_requirements with zip file name
     #   uses: actions/upload-artifact@v4

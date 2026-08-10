@@ -1,52 +1,53 @@
 cmake_minimum_required(VERSION 3.24)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/deps/cyberpunk_cmake")
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/deps/red4ext.sdk/cmake")
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_C_COMPILER cl)
+set(CMAKE_CXX_COMPILER cl)
+set(CMAKE_SYSTEM_NAME Windows)
 
-include(CyberpunkMod)
+project(in_world_navigation VERSION 1.0.0 LANGUAGES CXX)
 
-include(ConfigureVersionFromGit)
-configure_version_from_git()
+add_subdirectory(deps/red4ext.sdk)
 
-project(in_world_navigation VERSION ${GIT_VERSION_MAJOR}.${GIT_VERSION_MINOR}.${GIT_VERSION_PATCH} LANGUAGES NONE)
-
-configure_mod(
-  NAME "In-World Navigation"
-  SLUG ${PROJECT_NAME}
-  AUTHOR "Jack Humbert"
-  URL "https://github.com/jackhumbert/in_world_navigation"
-  LICENSE "Licensed under the MIT license. See the license.md in the root project for details."
+set(PROJECT_HEADER_FILES
+  src/red4ext/InWorldNavigation.hpp
+  src/red4ext/stdafx.hpp
+  src/red4ext/ext.hpp
 )
 
-set(LOAD_ARCHIVES_FROM_RED4EXT ON)
-set(LOAD_REDSCRIPT_FROM_RED4EXT ON)
-
-find_program(ZOLTAN_CLANG_EXE NAMES zoltan-clang.exe PATHS "C:/Users/Jack/Documents/cyberpunk/zoltan/target/release/" CACHE)
-find_program(REDSCRIPT_CLI_EXE NAMES redscript-cli.exe PATHS "${MOD_TOOLS_DIR}" CACHE)
-find_program(CYBERPUNK_2077_EXE NAMES Cyberpunk2077.exe PATHS "${CYBERPUNK_2077_GAME_DIR}/bin/x64" CACHE DOC "Cyberpunk2077.exe Executable File")
-
-configure_red4ext(src/red4ext)
-# configure_red4ext_addresses(Addresses.hpp)
-
-find_package(Detours)
-find_package(Spdlog)
-find_package(ArchiveXL)
-find_package(RedLib)
-find_package(ModSettings)
-
-target_link_libraries(${MOD_SLUG}.dll
-  PUBLIC
-    Detours
-    spdlog
-    ArchiveXL
-    RedLib
+set(PROJECT_SRC_FILES
+  src/red4ext/Main.cpp
+  src/red4ext/InWorldNavigation.cpp
+  src/red4ext/stdafx.cpp
 )
-configure_redscript(src/redscript)
-target_link_libraries(${MOD_SLUG}.packed.reds PUBLIC mod_settings.packed.reds)
-configure_archives(resources/packed/archive/pc/mod/in_world_navigation.archive)
-configure_folder_file(readme.md)
-configure_folder_file(license.md)
-# configure_uninstall()
-configure_release(${MOD_SLUG}_${MOD_VERSION_STR}.zip)
-configure_install()
+
+add_library(${CMAKE_PROJECT_NAME} SHARED "")
+
+target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${PROJECT_HEADER_FILES} ${PROJECT_SRC_FILES})
+
+target_link_libraries(${CMAKE_PROJECT_NAME}
+  PRIVATE
+  RED4ext::SDK
+)
+
+add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory
+        "mod_package/red4ext/plugins/in_world_navigation"
+
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "in_world_navigation.dll"
+        "mod_package/red4ext/plugins/in_world_navigation/in_world_navigation.dll"
+
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "../resources/packed/archive/pc/mod/in_world_navigation.archive"
+        "mod_package/red4ext/plugins/in_world_navigation/in_world_navigation.archive"
+
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "../src/redscript/module.reds"
+        "mod_package/red4ext/plugins/in_world_navigation/module.reds"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "../src/redscript/packed.reds"
+        "mod_package/red4ext/plugins/in_world_navigation/packed.reds"
+)

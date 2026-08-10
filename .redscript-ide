@@ -1,4 +1,0 @@
-redscript_dir = [ 
-  "src/redscript",
-  "deps/mod_settings/redscript"
-]
