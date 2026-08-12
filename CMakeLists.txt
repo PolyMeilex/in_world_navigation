@@ -35,6 +35,8 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory
         "mod_package/red4ext/plugins/in_world_navigation"
+    COMMAND ${CMAKE_COMMAND} -E make_directory
+        "mod_package/archive/pc/mod"
 
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "in_world_navigation.dll"
@@ -42,7 +44,7 @@ add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
 
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "../resources/packed/archive/pc/mod/in_world_navigation.archive"
-        "mod_package/red4ext/plugins/in_world_navigation/in_world_navigation.archive"
+        "mod_package/archive/pc/mod/in_world_navigation.archive"
 
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "../src/redscript/module.reds"

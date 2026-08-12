@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        config: [ Debug, RelWithDebInfo ]
+        config: [ RelWithDebInfo ]
 
     steps:
     - uses: actions/checkout@v3
@@ -45,7 +45,7 @@ jobs:
     - name: Upload game_dir with zip file name
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.MOD_ZIP_FILENAME }}_${{ env.PRETTY_CONFIG }}_${{ env.SHORT_SHA }}
+        name: mod_package
         path: ${{ github.workspace }}/build/mod_package/**
 
     # - name: Upload game_dir_debug with zip file name
