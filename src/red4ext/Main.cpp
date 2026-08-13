@@ -12,6 +12,8 @@
 #include <RED4ext/Scripting/Natives/Generated/red/ResourceReferenceScriptToken.hpp>
 #include "InWorldNavigation.hpp"
 
+#include <RedLib.hpp>
+
 void UpdateNavPath(
     RED4ext::game::ui::MinimapContainerController *mmcc, 
     __int64 updateContext, 
@@ -50,12 +52,9 @@ void CastResRefToFxResource(RED4ext::IScriptable *aContext, RED4ext::CStackFrame
   }
 }
 
-RED4EXT_C_EXPORT void RED4EXT_CALL RegisterTypes() {
-  InWorldNavigation::RegisterTypes();
-}
+RED4EXT_C_EXPORT void RED4EXT_CALL RegisterTypes() {}
 
 RED4EXT_C_EXPORT void RED4EXT_CALL PostRegisterTypes() {
-  InWorldNavigation::PostRegisterTypes();
   auto rtti = RED4ext::CRTTISystem::Get();
 
   auto ms = rtti->GetClass("gameuiMinimapContainerController");
@@ -77,6 +76,7 @@ RED4EXT_C_EXPORT bool RED4EXT_CALL Main(RED4ext::v1::PluginHandle aHandle, RED4e
 
     RED4ext::CRTTISystem::Get()->AddRegisterCallback(RegisterTypes);
     RED4ext::CRTTISystem::Get()->AddPostRegisterCallback(PostRegisterTypes);
+    Red::TypeInfoRegistrar::RegisterDiscovered();
 
     aSdk->scripts->Add(aHandle, L"packed.reds");
     aSdk->scripts->Add(aHandle, L"module.reds");
