@@ -8,9 +8,7 @@ set(CMAKE_SYSTEM_NAME Windows)
 
 project(in_world_navigation VERSION 1.0.0 LANGUAGES CXX)
 
-add_compile_definitions(NOMINMAX)
 add_subdirectory(deps/red4ext.sdk)
-add_subdirectory(deps/cp2077-red-lib)
 
 set(PROJECT_HEADER_FILES
   src/red4ext/InWorldNavigation.hpp
@@ -32,7 +30,6 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${PROJECT_HEADER_FILES} ${PROJECT_S
 target_link_libraries(${CMAKE_PROJECT_NAME}
   PRIVATE
   RED4ext::SDK
-  RedLib
 )
 
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
