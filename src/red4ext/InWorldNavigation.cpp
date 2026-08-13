@@ -1,7 +1,8 @@
 #include "InWorldNavigation.hpp"
 
-RED4ext::TTypedClass<InWorldNavigation> inWorldNavigationClass("InWorldNavigation");
-RED4ext::CClass* InWorldNavigation::GetNativeType() { return &inWorldNavigationClass; }
+RED4ext::CClass* InWorldNavigation::GetNativeType() {
+  return RED4ext::CRTTISystem::Get()->GetClass("InWorldNavigation");
+}
 
 RED4ext::Handle<InWorldNavigation> handle;
 
@@ -26,24 +27,27 @@ void GetInstance_Native(RED4ext::IScriptable* aContext, RED4ext::CStackFrame* aF
 }
 
 void InWorldNavigation::RegisterTypes() {
-    RED4ext::CRTTISystem::Get()->RegisterType(&inWorldNavigationClass);
+    auto* inWorldNavigationClass = new RED4ext::TTypedClass<InWorldNavigation>("InWorldNavigation");
+    RED4ext::CRTTISystem::Get()->RegisterType(inWorldNavigationClass);
 }
 
 void InWorldNavigation::PostRegisterTypes() {
     auto rtti = RED4ext::CRTTISystem::Get();
     
+    RED4ext::CClass* inWorldNavigationClass = rtti->GetClass("InWorldNavigation");
+
     // Setup inheretence
     auto scriptable = rtti->GetClass("IScriptable");
-    inWorldNavigationClass.parent = scriptable;
-    inWorldNavigationClass.flags = { .isNative = true };
+    inWorldNavigationClass->parent = scriptable;
+    inWorldNavigationClass->flags = { .isNative = true };
 
     auto getInstanceMethod = RED4ext::CClassStaticFunction::Create(
-        &inWorldNavigationClass, 
+        inWorldNavigationClass, 
         "GetInstance",
         "GetInstance",
         &GetInstance_Native, 
         { .isNative = true }
     );
     getInstanceMethod->SetReturnType("handle:InWorldNavigation");
-    inWorldNavigationClass.RegisterFunction(getInstanceMethod);
+    inWorldNavigationClass->RegisterFunction(getInstanceMethod);
 }
